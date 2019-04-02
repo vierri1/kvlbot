@@ -1,11 +1,13 @@
 package ru.poponinav.kvlbot.controller;
 
+import com.google.gson.JsonObject;
 import com.vk.api.sdk.callback.objects.messages.CallbackConfirmationMessage;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.TransformedMultiValuedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class MainController {
@@ -36,8 +39,10 @@ public class MainController {
     }
 
     @PostMapping(value = "/event")
-    public void confirm(String payload, HttpServletResponse response) throws IOException {
-        callbackApiHandler.parse(payload);
+    public void confirm(RequestEntity request, HttpServletResponse response) throws IOException {
+        if (request.hasBody()) {
+            callbackApiHandler.parse(request.getBody().toString());
+        }
         PrintWriter printWriter = response.getWriter();
         printWriter.print("ok");
     }
