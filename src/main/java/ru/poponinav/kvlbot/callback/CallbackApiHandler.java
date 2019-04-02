@@ -20,6 +20,7 @@ public class CallbackApiHandler extends CallbackApi {
 
     @Override
     public void messageNew(Integer groupId, String secret, Message message) {
+        System.out.println("GroupId: " + groupId + ", message: " + message);
     }
 
     @Override

@@ -36,14 +36,9 @@ public class MainController {
     }
 
     @PostMapping(value = "/event")
-    public void confirm(HttpServletResponse response) throws IOException {
+    public void confirm(@RequestBody String payload, HttpServletResponse response) throws IOException {
+        callbackApiHandler.parse(payload);
         PrintWriter printWriter = response.getWriter();
-        printWriter.print("a6c4ef0f");
+        printWriter.print("ok");
     }
-
-//    @PostMapping("/event")
-//    public ResponseEntity<String> event(@RequestBody String payload) {
-//        callbackApiHandler.parse(payload);
-//        return okResponse;
-//    }
 }
