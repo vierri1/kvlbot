@@ -35,15 +35,15 @@ public class MainController {
         this.okResponse = new ResponseEntity<>(OK_RESPONSE_MESSAGE, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/confirm")
+    @PostMapping(value = "/event")
     public void confirm(HttpServletResponse response) throws IOException {
         PrintWriter printWriter = response.getWriter();
         printWriter.print("a6c4ef0f");
     }
 
-    @PostMapping("/event")
-    public ResponseEntity<String> event(@RequestBody String payload) {
-        callbackApiHandler.parse(payload);
-        return okResponse;
-    }
+//    @PostMapping("/event")
+//    public ResponseEntity<String> event(@RequestBody String payload) {
+//        callbackApiHandler.parse(payload);
+//        return okResponse;
+//    }
 }
