@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.poponinav.kvlbot.callback.CallbackApiHandler;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +35,10 @@ public class MainController {
         this.okResponse = new ResponseEntity<>(OK_RESPONSE_MESSAGE, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/confirm", produces = "text/plain")
-    public String confirm(@RequestBody CallbackConfirmationMessage confirmationMessage) {
-        return "a6c4ef0f";
+    @PostMapping(value = "/confirm")
+    public void confirm(HttpServletResponse response) throws IOException {
+        PrintWriter printWriter = response.getWriter();
+        printWriter.print("a6c4ef0f");
     }
 
     @PostMapping("/event")
