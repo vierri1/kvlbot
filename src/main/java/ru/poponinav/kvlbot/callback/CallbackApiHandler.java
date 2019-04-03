@@ -6,11 +6,13 @@ import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
+import com.vk.api.sdk.objects.messages.MessageAttachment;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Random;
 
 @Getter
@@ -35,17 +37,36 @@ public class CallbackApiHandler extends CallbackApi {
     public void messageNew(Integer groupId, String secret, Message message) {
         GroupActor groupActor = new GroupActor(GROUP_ID, VK_API_KEY);
         try {
-            vkApiClient
-                    .messages()
-                    .send(groupActor)
-                    .message(message.getText())
-                    .userId(message.getFromId())
-                    .randomId(new Random().nextInt(10000)).execute();
-        } catch (ApiException e) {
+            if (!message.getText().isEmpty()) {
+                vkApiClient
+                        .messages()
+                        .send(groupActor)
+                        .message(message.getText())
+                        .userId(message.getFromId())
+                        .randomId(new Random().nextInt(10000)).execute();
+            }
+            List<MessageAttachment> messageAttachments = message.getAttachments();
+            if (!messageAttachments.isEmpty()) {
+                Integer stickerId = null;
+                for (MessageAttachment attachment : messageAttachments) {
+                    stickerId = attachment.getSticker().getStickerId();
+                }
+                vkApiClient
+                        .messages()
+                        .send(groupActor)
+                        .userId(message.getFromId())
+                        .stickerId(stickerId)
+                        .randomId(new Random().nextInt(10000))
+                        .execute();
+            }
+        } catch (
+                ApiException e) {
             e.printStackTrace();
-        } catch (ClientException e) {
+        } catch (
+                ClientException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
